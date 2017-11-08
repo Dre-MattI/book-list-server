@@ -43,7 +43,7 @@ function loadBooks() {
               INSERT INTO
               books(title, author, isbn, image_url)
                 VALUES($1, $2, $3, $4);`,
-              [book.author, book.title, book.isbn, book.image_url]
+              [book.title, book.author, book.isbn, book.image_url]
             )
           })
         })
@@ -57,8 +57,8 @@ function loadDB() {
     CREATE TABLE IF NOT EXISTS
     books (
       book_id SERIAL PRIMARY KEY,
-      author VARCHAR(50),
       title VARCHAR(50),
+      author VARCHAR(50),
       isbn VARCHAR(50),
       image_url TEXT
     );`
