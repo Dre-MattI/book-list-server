@@ -2,14 +2,15 @@
 
 const pg = require('pg');
 const express = require('express');
-// const fs = require('fs');
+const fs = require('fs');
 const cors = require('cors');
 
 
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = 'postgres://postgres:081583@localhost:5432/postgres';
+////process.env.DATABASE_URL;
 const client = new pg.Client(DATABASE_URL);
 
 client.connect();
@@ -30,14 +31,13 @@ app.get('/api/v1/books', (request, response) => {
 app.get('*', (request, response) => response.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
-loadDB();
+// loadDB();
 
 function loadBooks() {
-  console.log('************');
   client.query(`SELECT count(*) FROM books`)
     .then(result => {
       if (!parseInt(result.rows[0].count)){
-        cors.readFile('data/books.json', function(err, file) {
+        fs.readFile('data/books.json', function(err, file) {
           JSON.parse(file.toString()).forEach(book => {
             client.query(`
               INSERT INTO
@@ -60,7 +60,7 @@ function loadDB() {
       author VARCHAR(50),
       title VARCHAR(50),
       isbn VARCHAR(50),
-      image_url TEXT,
+      image_url TEXT
     );`
   )
     .then(data => loadBooks(data))
