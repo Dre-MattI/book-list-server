@@ -2,7 +2,7 @@
 
 const pg = require('pg');
 const express = require('express');
-// const fs = require('fs');
+const fs = require('fs');
 const cors = require('cors');
 
 
@@ -37,7 +37,7 @@ function loadBooks() {
   client.query(`SELECT count(*) FROM books`)
     .then(result => {
       if (!parseInt(result.rows[0].count)){
-        cors.readFile('data/books.json', function(err, file) {
+        fs.readFile('data/books.json', function(err, file) {
           JSON.parse(file.toString()).forEach(book => {
             client.query(`
               INSERT INTO
