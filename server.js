@@ -29,9 +29,9 @@ app.get('/api/v1/books', (request, response) => {
 });
 
 app.get('*', (request, response) => response.redirect(CLIENT_URL));
+loadDB();
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
-loadDB();
 
 function loadBooks() {
   client.query(`SELECT count(*) FROM books`)
