@@ -9,8 +9,8 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
-const DATABASE_URL = 'postgres://postgres:081583@localhost:5432/postgres';
-////process.env.DATABASE_URL;
+const DATABASE_URL = process.env.DATABASE_URL;
+// 'postgres://postgres:081583@localhost:5432/booklist';
 const client = new pg.Client(DATABASE_URL);
 
 client.connect();
@@ -19,7 +19,7 @@ client.on('error', err => console.error(err));
 app.use(cors());
 
 
-app.get('/test', (request, response) => response.send('Hello World!'));
+app.get('/test', (request, response) => response.send('F**k this Project'));
 
 app.get('/api/v1/books', (request, response) => {
   client.query(`
@@ -31,7 +31,7 @@ app.get('/api/v1/books', (request, response) => {
 app.get('*', (request, response) => response.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
-// loadDB();
+loadDB();
 
 function loadBooks() {
   client.query(`SELECT count(*) FROM books`)
