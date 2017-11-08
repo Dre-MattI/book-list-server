@@ -9,9 +9,9 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
+const DATABASE_URL = process.env.DATABASE_URL;
+const client = new pg.Client(DATABASE_URL);
 
-const conString = 'postgres://postgres:081583@localhost:5432/postgres';
-const client = new pg.Client(conString);
 client.connect();
 client.on('error', err => console.error(err));
 
@@ -41,9 +41,9 @@ function loadBooks() {
           JSON.parse(file.toString()).forEach(book => {
             client.query(`
               INSERT INTO
-              books(title, author, isbn, image_url, description)
-                VALUES($1, $2, $3, $4, $5);`,
-              [book.author, book.title, book.isbn, book.image_url, book.description]
+              books(title, author, isbn, image_url)
+                VALUES($1, $2, $3, $4);`,
+              [book.author, book.title, book.isbn, book.image_url]
             )
           })
         })
@@ -61,7 +61,6 @@ function loadDB() {
       title VARCHAR(50),
       isbn VARCHAR(50),
       image_url TEXT,
-      description TEXT
     );`
   )
     .then(data => loadBooks(data))
