@@ -9,9 +9,9 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
-const DATABASE_URL = process.env.DATABASE_URL;
+// const DATABASE_URL = process.env.DATABASE_URL;
 // 'postgres://postgres:081583@localhost:5432/booklist';
-const client = new pg.Client(DATABASE_URL);
+const client = new pg.Client(process.env.DATABASE_URL);
 
 client.connect();
 client.on('error', err => console.error(err));
