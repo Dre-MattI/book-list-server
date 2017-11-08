@@ -2,8 +2,7 @@
 
 const pg = require('pg');
 const express = require('express');
-const fs = require('fs');
-// const bodyParser = require('body-parser');
+// const fs = require('fs');
 const cors = require('cors');
 
 
@@ -14,6 +13,8 @@ const CLIENT_URL = process.env.CLIENT_URL;
 const conString = 'postgres://postgres:081583@localhost:5432/postgres';
 const client = new pg.Client(conString);
 client.connect();
+client.on('error', err => console.error(err));
+
 app.use(cors());
 
 
@@ -21,25 +22,22 @@ app.get('/test', (request, response) => response.send('Hello World!'));
 
 app.get('/api/v1/books', (request, response) => {
   client.query(`
-     SELECT book_id, title, author, image_url FROM books;
-     `)
+     SELECT book_id, title, author, image_url FROM books;`)
     .then(result => response.send(result.rows))
     .catch(err => console.log(err));
 });
 
 app.get('*', (request, response) => response.redirect(CLIENT_URL));
-
-loadDB();
-
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
+loadDB();
 
 function loadBooks() {
   console.log('************');
   client.query(`SELECT count(*) FROM books`)
     .then(result => {
       if (!parseInt(result.rows[0].count)){
-        fs.readFile('data/books.json', function(err, file) {
+        cors.readFile('data/books.json', function(err, file) {
           JSON.parse(file.toString()).forEach(book => {
             client.query(`
               INSERT INTO
