@@ -29,9 +29,10 @@ app.get('/api/v1/books', (request, response) => {
 });
 
 app.get('*', (request, response) => response.redirect(CLIENT_URL));
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
 loadDB();
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
 
 function loadBooks() {
   client.query(`SELECT count(*) FROM books`)
@@ -43,7 +44,7 @@ function loadBooks() {
               INSERT INTO
               books(title, author, isbn, image_url)
                 VALUES($1, $2, $3, $4);`,
-              [book.title, book.author, book.isbn, book.image_url]
+              [book.author, book.title, book.isbn, book.image_url]
             )
           })
         })
@@ -57,8 +58,8 @@ function loadDB() {
     CREATE TABLE IF NOT EXISTS
     books (
       book_id SERIAL PRIMARY KEY,
-      title VARCHAR(50),
       author VARCHAR(50),
+      title VARCHAR(50),
       isbn VARCHAR(50),
       image_url TEXT
     );`
