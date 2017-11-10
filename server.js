@@ -1,3 +1,4 @@
+
 'use strict';
 
 const pg = require('pg');
@@ -5,8 +6,6 @@ const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
-
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -18,6 +17,8 @@ app.use(cors());
 
 
 app.get('/test', (request, response) => response.send('Hello World!'));
+
+
 
 app.get('/api/v1/books', (request, response) => {
   console.log('this is the get for the books');
@@ -41,7 +42,7 @@ app.get('/book/:id', (request, response) => {
     .catch(err => console.log(err));
 });
 
-app.put('/book/update/:id', (request, response) => {
+app.put('/book/update/:id', bodyParser, (request, response) => {
   console.log('this is working');
   let {title, author, isbn, image_url, description} = request.body;
   client.query(`
@@ -55,7 +56,7 @@ app.put('/book/update/:id', (request, response) => {
     .catch(err => console.error(err))
 })
 
-app.post('/book/new', (request, response) => {
+app.post('/book/new', bodyParser, (request, response) => {
   client.query(`
     INSERT INTO books(title, author, isbn, image_url, description)
     VALUES ($1, $2, $3, $4, $5);`,
@@ -81,7 +82,6 @@ app.get('*', (request, response) => response.redirect(CLIENT_URL));
 loadDB();
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-
 
 function loadBooks() {
   client.query(`SELECT count(*) FROM books`)
