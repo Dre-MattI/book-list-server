@@ -1,3 +1,4 @@
+
 'use strict';
 
 const pg = require('pg');
@@ -15,6 +16,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
 app.get('/test', (request, response) => response.send('Hello World!'));
+
+
 
 app.get('/api/v1/books', (request, response) => {
   console.log('this is the get for the books');
@@ -39,7 +42,11 @@ app.get('/book/:id', (request, response) => {
 });
 
 app.put('/book/update/:id', bodyParser, (request, response) => {
+<<<<<<< HEAD
   console.log(request.body);
+=======
+  console.log('this is working');
+>>>>>>> 30b15bbda6034aecde5eadb170f52953453145aa
   let {title, author, isbn, image_url, description} = request.body;
   client.query(`
     UPDATE books
@@ -78,7 +85,6 @@ app.get('*', (request, response) => response.redirect(CLIENT_URL));
 loadDB();
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-
 
 function loadBooks() {
   client.query(`SELECT count(*) FROM books`)
