@@ -47,7 +47,7 @@ app.put('/book/update/:id', bodyParser, (request, response) => {
   client.query(`
     UPDATE books
     SET title=$1, author=$2, isbn=$3, image_url=$4, description=$5
-    WHERE book_id=$6
+    WHERE id=$6
     `,
     [title, author, isbn, image_url, description, request.params.id]
   )
